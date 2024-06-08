@@ -1,0 +1,25 @@
+name: Learning github actions
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  spring-app-ci-cd:
+    name: CI/CD for spring application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+      - name: Unit tests
+        run: mvn -B test --file pom.xml
+      - name: Build & Package
+        run: | # mutli-line run block: notice the presence of two commands
+          mvn clean
+          mvn -B package --file pom.xml
