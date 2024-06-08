@@ -27,9 +27,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: . # meaning that the docker file present in the project
-          dockerfile: Dockerfile # file name
+          file: ./Dockerfile # file name
           push: false # we don't want to push we want here to test just if we can build the image
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-ci-cd-demo:$(date +'%Y-%m-%d %H:%M:%S')
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-ci-cd-demo:latest
       - name: Login to docker hub
         uses: docker/login-action@v3
         with:
@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          dockerfile: Dockerfile
+          file: ./Dockerfile
           push: true # here is the difference, now we are pushing our image
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-ci-cd-demo:$(date +'%Y-%m-%d %H:%M:%S')
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-ci-cd-demo:latest
