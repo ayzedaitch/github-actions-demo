@@ -23,3 +23,22 @@ jobs:
         run: | # mutli-line run block: notice the presence of two commands
           mvn clean
           mvn -B package --file pom.xml
+      - name: Build docker image
+        run: docker/build-push-action@v5
+        with:
+          context: . # meaning that the docker file present in the project
+          dockerfile: Dockerfile # file name
+          push: false # we don't want to push we want here to test just if we can build the image
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-ci-cd-demo:$(date +'%Y-%m-%d %H:%M:%S')
+      - name: Login to docker hub
+        run: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push docker image # same as the one above except push: true
+        run: docker/build-push-action@v5
+        with:
+          context: .
+          dockerfile: Dockerfile
+          push: true # here is the difference, now we are pushing our image
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-ci-cd-demo:$(date +'%Y-%m-%d %H:%M:%S')
