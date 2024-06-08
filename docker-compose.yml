@@ -1,0 +1,30 @@
+services:
+  postgres:
+    container_name: pgdemo
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: demo
+    ports:
+      - "2345:5432"
+    volumes:
+      - pgdb:/var/lib/postgresql/data
+    networks:
+      - spring-network
+  spring-application:
+    container_name: spring-test-container
+    image: springimage
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-network
+    depends_on:
+      - postgres
+
+networks:
+  spring-network:
+    driver: bridge
+
+volumes:
+  pgdb:
